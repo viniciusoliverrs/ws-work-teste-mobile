@@ -15,7 +15,7 @@ class UpdateCarAsFavoriteUsecaseImpl implements IUpdateCarAsFavoriteUsecase {
   });
 
   @override
-  Future<Result<ApplicationException, int>> call(FavoriteCarEntity dto) async {
-    return await carRepository.updateCarAsFavorite(dto);
+  Future<Result<ApplicationException, int>> call(FavoriteCarEntity entity) async {
+    return await carRepository.updateCarAsFavorite(entity);
   }
 }

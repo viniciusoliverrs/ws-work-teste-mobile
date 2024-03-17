@@ -38,6 +38,8 @@ class CarRepositoryImpl implements ICarRepository {
       return (null, result);
     } on ApplicationException catch (e) {
       return (e, null);
+    } on MapperException catch (e) {
+      return (ApplicationException(e.message, stackTrace: e.stackTrace), null);
     } catch (e, s) {
       return (ApplicationException(e.toString(), stackTrace: s), null);
     }
@@ -65,6 +67,8 @@ class CarRepositoryImpl implements ICarRepository {
       return (null, result);
     } on ApplicationException catch (e) {
       return (e, null);
+    } on MapperException catch (e) {
+      return (ApplicationException(e.message, stackTrace: e.stackTrace), null);
     } catch (e, s) {
       return (ApplicationException(e.toString(), stackTrace: s), null);
     }
@@ -78,6 +82,8 @@ class CarRepositoryImpl implements ICarRepository {
       return (null, result);
     } on ApplicationException catch (e) {
       return (e, null);
+    } on MapperException catch (e) {
+      return (ApplicationException(e.message, stackTrace: e.stackTrace), null);
     } catch (e, s) {
       return (ApplicationException(e.toString(), stackTrace: s), null);
     }
@@ -91,6 +97,8 @@ class CarRepositoryImpl implements ICarRepository {
       return (null, result);
     } on ApplicationException catch (e) {
       return (e, null);
+    } on MapperException catch (e) {
+      return (ApplicationException(e.message, stackTrace: e.stackTrace), null);
     } catch (e, s) {
       return (ApplicationException(e.toString(), stackTrace: s), null);
     }
