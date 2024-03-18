@@ -12,7 +12,7 @@ class CarRepositoryMock extends Mock implements ICarRepository {}
 void main() {
   final repositorry = CarRepositoryMock();
   final removeCarAsFavoriteUsecase = RemoveCarAsFavoriteUsecaseImpl(carRepository: repositorry);
-  group('RemoveCarAsFavoriteUsecaseImpl', () async {
+  group('RemoveCarAsFavoriteUsecaseImpl', () {
     test('should remove car as favorite', () async {
       final dto = SetCarFavoriteDto(
         carId: Faker().randomGenerator.integer(9999),
@@ -27,7 +27,7 @@ void main() {
       }
     });
 
-    test('should return a ApplicationException', () async {
+    test('should return ApplicationException', () async {
       final dto = SetCarFavoriteDto(
         carId: Faker().randomGenerator.integer(9999),
       );
@@ -37,7 +37,7 @@ void main() {
         final data = result.getFailure;
         expect(data, isA<ApplicationException>());
       } else {
-        fail('should return a ApplicationException');
+        fail('should return ApplicationException');
       }
     });
   });
