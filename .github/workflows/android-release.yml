@@ -19,6 +19,13 @@ jobs:
     - run: flutter analyze
     - run: flutter build apk --release --split-per-abi
     - run: flutter build appbundle
+    - name: Get version and build number
+      id: version
+      run: |
+        echo "Version=$(grep -oP 'version: \K.*' pubspec.yaml)"
+        echo "BuildNumber=$(flutter build apk --build-number)"
+        echo "::set-output name=version::$(grep -oP 'version: \K.*' pubspec.yaml)"
+        echo "::set-output name=build_number::$(flutter build apk --build-number)"
     - name: Upload APK
       uses: actions/upload-artifact@v2
       with:
@@ -29,4 +36,4 @@ jobs:
       with:
         artifacts: "build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk ,build/app/outputs/bundle/release/app-release.aab"
         token: ${{ secrets.GH_TOKEN }}
-        tag: v1.0.${{ github.run_number }}
+        tag: v${{ steps.version.outputs.version }}.${{ steps.version.outputs.build_number }}
