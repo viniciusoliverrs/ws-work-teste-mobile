@@ -41,6 +41,6 @@ jobs:
       with:
         artifacts: "build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk ,build/app/outputs/bundle/release/app-release.aab"
         token: ${{ secrets.GH_TOKEN }}
-        tag: v${{ steps.version.outputs.version }}
+        tag: v${{ steps.version.outputs.version }}_${{ steps.version.outputs.build_number }}
         title: "Release v${{ steps.version.outputs.version }}-${{ steps.version.outputs.build_number }} - $(date +'%Y-%m-%d %H:%M:%S')"
         body: ${{ steps.release_description.outputs.description }}
