@@ -34,20 +34,20 @@ class _HomeScreenState extends State<HomeScreen> {
       body: ValueListenableBuilder(
           valueListenable: widget.controller,
           builder: (_, state, __) {
-            if (state is HomeLoadedState) {
-              return Column(
+            return AnimatedOpacity(
+              duration: const Duration(milliseconds: 500),
+              opacity: state is HomeLoadingState ? 0 : 1,
+              child: Column(
                 children: [
-                  Expanded(
-                    child: CarsListView(
-                      cars: state.cars,
-                      onTap: (car) => widget.controller.favoriteCar(car.id),
+                  if (state is HomeLoadedState)
+                    Expanded(
+                      child: CarsListView(
+                        cars: state.cars,
+                        onTap: (car) => widget.controller.favoriteCar(car.id),
+                      ),
                     ),
-                  ),
                 ],
-              );
-            }
-            return const Center(
-              child: CircularProgressIndicator(),
+              ),
             );
           }),
     );

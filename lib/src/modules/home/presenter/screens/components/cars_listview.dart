@@ -80,6 +80,7 @@ class CarsListView extends StatelessWidget {
                             Icon(
                               car.isFavorite ? Icons.favorite : Icons.favorite_border,
                               color: car.isFavorite ? Colors.red : Colors.grey,
+                              size: 30,
                             ),
                           ],
                         ),

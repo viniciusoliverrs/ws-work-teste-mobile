@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../../../data/datasources/local/local_datasource.dart';
@@ -18,9 +19,10 @@ class LocalDatasourceImpl implements ILocalDatasource {
   Future<Database> get database async {
     try {
       if (_database != null) return _database!;
+      final path = await getDatabasesPath();
 
       _database = await openDatabase(
-        '$databaseName.db',
+        join(path, databaseName),
         version: 1,
         onCreate: _onCreateDatabase,
       );
@@ -38,10 +40,8 @@ class LocalDatasourceImpl implements ILocalDatasource {
 
   @override
   Future<void> close() async {
-    if (_database != null) {
-      await _database!.close();
-      _database = null;
-    }
+    await _database?.close();
+    _database = null;
   }
 
   @override
@@ -54,7 +54,11 @@ class LocalDatasourceImpl implements ILocalDatasource {
   Future<int> insert(String table, Map<String, dynamic> data) async {
     try {
       final db = await database;
-      return await db.insert(table, data);
+      return await db.insert(
+        table,
+        data,
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
     } catch (e, s) {
       throw ApplicationException(e.toString(), stackTrace: s);
     }
@@ -69,7 +73,13 @@ class LocalDatasourceImpl implements ILocalDatasource {
   }) async {
     try {
       final db = await database;
-      return await db.update(table, data);
+      return await db.update(
+        table,
+        data,
+        conflictAlgorithm: ConflictAlgorithm.replace,
+        where: where,
+        whereArgs: whereArgs,
+      );
     } catch (e, s) {
       throw ApplicationException(e.toString(), stackTrace: s);
     }

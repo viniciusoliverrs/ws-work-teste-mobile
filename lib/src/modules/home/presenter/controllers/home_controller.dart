@@ -31,7 +31,7 @@ class HomeController extends BaseController<HomeState> {
   Future<void> initialize() async {
     await _getCars();
     _syncLeadsTimer?.cancel();
-    _syncLeadsTimer = Timer.periodic(const Duration(seconds: 5), (timer) async {
+    _syncLeadsTimer = Timer.periodic(const Duration(minutes: 15), (timer) async {
       final oldState = currentState;
       if (oldState is HomeLoadedState) {
         final syncLedsResponse = await syncLeadsUsecase(oldState.favoriteCars);
