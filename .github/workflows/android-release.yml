@@ -1,8 +1,7 @@
-name: Test, Build and Release apk
+name: Test, Build and Android Release apk
 on: 
   push:
-    branches:
-      - main
+    branches: ["master"]
 jobs:
   build:
     name: Build APK
@@ -14,7 +13,7 @@ jobs:
         java-version: '12.x'
     - uses: subosito/flutter-action@v1
       with:
-        flutter-version: '3.3.8'
+        flutter-version: '3.13.3'
     - run: flutter pub get
     - run: flutter test
     - run: flutter analyze
