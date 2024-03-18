@@ -26,6 +26,11 @@ jobs:
         echo "BuildNumber=$(flutter build apk --build-number)"
         echo "::set-output name=version::$(grep -oP 'version: \K.*' pubspec.yaml)"
         echo "::set-output name=build_number::$(flutter build apk --build-number)"
+    - name: Generate Release Description
+      id: release_description
+      run: |
+        git log --pretty=format:"- %s" $(git describe --tags --abbrev=0)..HEAD > release_description.txt
+        echo "::set-output name=description::$(cat release_description.txt)"
     - name: Upload APK
       uses: actions/upload-artifact@v2
       with:
@@ -36,4 +41,5 @@ jobs:
       with:
         artifacts: "build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk ,build/app/outputs/bundle/release/app-release.aab"
         token: ${{ secrets.GH_TOKEN }}
-        tag: v${{ steps.version.outputs.version}}
+        tag: v${{ steps.version.outputs.version }}_${{ steps.version.outputs.build_number }}
+        body: ${{ steps.release_description.outputs.description }}
