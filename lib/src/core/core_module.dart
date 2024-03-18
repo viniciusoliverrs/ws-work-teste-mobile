@@ -26,6 +26,7 @@ class CoreModule extends Module {
     i.add<ILocalDatasource>(() => LocalDatasourceImpl(databaseName: "cars", migrations: [
           "DROP TABLE IF EXISTS cars;"
           "CREATE TABLE cars (id INTEGER PRIMARY KEY, car_id INTEGER, is_sync INTEGER)",
+          "ALTER TABLE cars ADD COLUMN createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP"
         ]));
     i.add<ICarDatasource>(CarDatasourceImpl.new);
     i.add<ICarRepository>(CarRepositoryImpl.new);
