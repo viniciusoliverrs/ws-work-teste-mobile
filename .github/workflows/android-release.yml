@@ -1,8 +1,8 @@
+name: Test, Build and Release apk
 on: 
   push:
     branches:
       - main
-name: Test, Build and Release apk
 jobs:
   build:
     name: Build APK
