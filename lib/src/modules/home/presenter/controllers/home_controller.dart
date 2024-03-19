@@ -20,13 +20,13 @@ class HomeController extends BaseController<HomeState> {
   final IRemoveCarAsFavoriteUsecase removeCarAsFavoriteUsecase;
   final ISyncLeadsUsecase syncLeadsUsecase;
   Timer? _syncLeadsTimer;
-  HomeController(
-    this.getCarsUsecase,
-    this.getFavoriteCarsUsecase,
-    this.saveCarAsFavoriteUsecase,
-    this.removeCarAsFavoriteUsecase,
-    this.syncLeadsUsecase,
-  ) : super(HomeInitialState());
+  HomeController({
+    required this.getCarsUsecase,
+    required this.getFavoriteCarsUsecase,
+    required this.saveCarAsFavoriteUsecase,
+    required this.removeCarAsFavoriteUsecase,
+    required this.syncLeadsUsecase,
+  }) : super(HomeInitialState());
 
   Future<void> initialize() async {
     await _getCars();
