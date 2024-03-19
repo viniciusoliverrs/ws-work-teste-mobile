@@ -36,6 +36,7 @@ void main() {
       if (result.isSuccess) {
         final favoriteCars = result.getSuccess;
         expect(favoriteCars, isA<List<FavoriteCarEntity>>());
+        
       } else {
         fail('should be success');
       }
