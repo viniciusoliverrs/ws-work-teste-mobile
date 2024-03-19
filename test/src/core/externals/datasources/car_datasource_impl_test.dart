@@ -1,6 +1,7 @@
 import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:ws_work_teste_mobile/src/core/data/datasources/car_datasource.dart';
 import 'package:ws_work_teste_mobile/src/core/data/datasources/local/local_datasource.dart';
 import 'package:ws_work_teste_mobile/src/core/domain/exceptions/application_exception.dart';
 import 'package:ws_work_teste_mobile/src/core/externals/datasources/car_datasource_impl.dart';
@@ -8,17 +9,17 @@ import 'package:ws_work_teste_mobile/src/core/utils/services/http/http.dart';
 import 'package:ws_work_teste_mobile/src/core/utils/services/http/http_failure.dart';
 import 'package:ws_work_teste_mobile/src/core/utils/services/http/http_response.dart';
 
-class HttpMock extends Mock implements IHttp {}
-
-class LocalDatasourceMock extends Mock implements ILocalDatasource {}
+import '../../../../mocks/utils.dart';
 
 void main() {
-  final http = HttpMock();
-  final localDatasource = LocalDatasourceMock();
-  final datasource = CarDatasourceImpl(
-    http: http,
-    localDatasource: localDatasource,
-  );
+  late IHttp http;
+  late ILocalDatasource localDatasource;
+  late ICarDatasource datasource;
+  setUp(() {
+    http = HttpMock();
+    localDatasource = LocalDatasourceMock();
+    datasource = CarDatasourceImpl(http: http, localDatasource: localDatasource);
+  });
   group('CarDatasourceImpl', () {
     test('should return a list of cars when the call to datasource is successful', () async {
       final carsMap = {
