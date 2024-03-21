@@ -2,7 +2,8 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:ws_work_teste_mobile/src/core/data/datasources/local/local_datasource.dart';
 import 'package:ws_work_teste_mobile/src/core/externals/datasources/local/local_datasource_impl.dart';
 
-import 'data/datasources/car_datasource.dart';
+import 'data/datasources/car_remote_datasource.dart';
+import 'data/datasources/local/car_local_datasource.dart';
 import 'data/repositories/car_repository_impl.dart';
 import 'domain/repositories/car_repository.dart';
 import 'domain/usecases/car/get_cars_usecase.dart';
@@ -11,7 +12,8 @@ import 'domain/usecases/car/remove_car_as_favorite_usecase.dart';
 import 'domain/usecases/car/save_car_as_favorite_usecase.dart';
 import 'domain/usecases/car/sync_leads_usecase.dart';
 import 'domain/usecases/car/update_car_favorite_usecase.dart';
-import 'externals/datasources/car_datasource_impl.dart';
+import 'externals/datasources/local/car_local_datasource_impl.dart';
+import 'externals/datasources/remote/car_remote_datasource_impl.dart';
 import 'utils/constants/api.dart';
 import 'utils/services/http/http.dart';
 import 'utils/services/http/http_impl.dart';
@@ -25,10 +27,11 @@ class CoreModule extends Module {
         ));
     i.add<ILocalDatasource>(() => LocalDatasourceImpl(databaseName: "cars", migrations: [
           "DROP TABLE IF EXISTS cars;"
-          "CREATE TABLE cars (id INTEGER PRIMARY KEY, car_id INTEGER, is_sync INTEGER)",
+              "CREATE TABLE cars (id INTEGER PRIMARY KEY, car_id INTEGER, is_sync INTEGER)",
           "ALTER TABLE cars ADD COLUMN createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP"
         ]));
-    i.add<ICarDatasource>(CarDatasourceImpl.new);
+    i.add<ICarLocalDatasource>(CarLocalDatasourceImpl.new);
+    i.add<ICarRemoteDatasource>(CarRemoteDatasourceImpl.new);
     i.add<ICarRepository>(CarRepositoryImpl.new);
     i.add<IGetCarsUsecase>(GetCarsUsecaseImpl.new);
     i.add<ISyncLeadsUsecase>(SyncLeadsUsecaseImpl.new);
