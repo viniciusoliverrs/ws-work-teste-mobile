@@ -5,6 +5,21 @@ import 'package:ws_work_teste_mobile/src/core/domain/exceptions/mapper_exception
 
 void main() {
   group('CarMapper', () {
+    test('fromMap exception', () {
+      final json = {
+        "id": Faker().randomGenerator.integer(9999),
+        "timestamp_cadastro": null,
+        "modelo_id": Faker().randomGenerator.integer(9999),
+        "ano": Faker().randomGenerator.integer(9999),
+        "combustivel": Faker().randomGenerator.string(10),
+        "num_portas": Faker().randomGenerator.integer(9999),
+        "cor": Faker().randomGenerator.string(10),
+        "nome_modelo": Faker().randomGenerator.string(10),
+        "valor": Faker().randomGenerator.decimal(),
+      };
+
+      expect(() => CarMapper.fromMap(json), throwsA(isA<MapperException>()));
+    });
     test('fromMap', () {
       final json = {
         "id": Faker().randomGenerator.integer(9999),
@@ -29,22 +44,6 @@ void main() {
       expect(result.color, json['cor']);
       expect(result.modelName, json['nome_modelo']);
       expect(result.price, json['valor']);
-    });
-
-    test('fromMap exception', () {
-      final json = {
-        "id": Faker().randomGenerator.integer(9999),
-        "timestamp_cadastro": null,
-        "modelo_id": Faker().randomGenerator.integer(9999),
-        "ano": Faker().randomGenerator.integer(9999),
-        "combustivel": Faker().randomGenerator.string(10),
-        "num_portas": Faker().randomGenerator.integer(9999),
-        "cor": Faker().randomGenerator.string(10),
-        "nome_modelo": Faker().randomGenerator.string(10),
-        "valor": Faker().randomGenerator.decimal(),
-      };
-
-      expect(() => CarMapper.fromMap(json), throwsA(isA<MapperException>()));
     });
 
     test('toMap', () {

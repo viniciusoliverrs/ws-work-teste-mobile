@@ -8,12 +8,12 @@ abstract interface class ISaveCarAsFavoriteUsecase {
 }
 
 class SaveCarAsFavoriteUsecaseImpl implements ISaveCarAsFavoriteUsecase {
-  final ICarRepository carRepository;
+  final ICarRepository repository;
   SaveCarAsFavoriteUsecaseImpl({
-    required this.carRepository,
+    required this.repository,
   });
   @override
   Future<Result<ApplicationException, int>> call({required SetCarFavoriteDto setCarFavoriteDto}) async {
-    return await carRepository.setCarFavorite(setCarFavoriteDto);
+    return await repository.setCarFavorite(setCarFavoriteDto);
   }
 }

@@ -7,38 +7,37 @@ import 'package:ws_work_teste_mobile/src/core/domain/repositories/car_repository
 import 'package:ws_work_teste_mobile/src/core/domain/usecases/car/save_car_as_favorite_usecase.dart';
 import 'package:ws_work_teste_mobile/src/core/utils/result.dart';
 
-class CarRepositoryMock extends Mock implements ICarRepository {}
+import '../../../../../mocks/utils.dart';
 
 void main() {
-  final carRepository = CarRepositoryMock();
-  final saveCarAsFavoriteUsecase = SaveCarAsFavoriteUsecaseImpl(carRepository: carRepository);
+  late ICarRepository repository;
+  late ISaveCarAsFavoriteUsecase saveCarAsFavoriteUsecase;
+  setUp(() {
+    repository = CarRepositoryMock();
+    saveCarAsFavoriteUsecase = SaveCarAsFavoriteUsecaseImpl(repository: repository);
+  });
   group('SaveCarAsFavoriteUsecaseImpl', () {
     test('should save car as favorite', () async {
-      final entity = SetCarFavoriteDto(
-        carId: 1,
-      );
+      final entity = SetCarFavoriteDto(carId: Faker().randomGenerator.integer(9999));
       final id = Faker().randomGenerator.integer(9999);
-      when(() => carRepository.setCarFavorite(entity)).thenAnswer((_) async => (null, id));
+      when(() => repository.setCarFavorite(entity)).thenAnswer((_) async => (null, id));
+
       final result = await saveCarAsFavoriteUsecase(setCarFavoriteDto: entity);
-      if (result.isSuccess) {
-        final data = result.getSuccess;
-        expect(data, isA<int>());
-      } else {
-        fail('should save car as favorite');
-      }
+      verify(() => repository.setCarFavorite(entity)).called(1);
+
+      expect(result.isSuccess, true);
+      expect(result.getSuccess, isA<int>());
     });
     test('should return a ApplicationException', () async {
-      final entity = SetCarFavoriteDto(
-        carId: 1,
-      );
-      when(() => carRepository.setCarFavorite(entity)).thenAnswer((_) async => (ApplicationException('Error'), null));
+      final entity = SetCarFavoriteDto(carId: Faker().randomGenerator.integer(9999));
+      final exception = ApplicationException(Faker().lorem.word());
+      when(() => repository.setCarFavorite(entity)).thenAnswer((_) async => (exception, null));
+
       final result = await saveCarAsFavoriteUsecase(setCarFavoriteDto: entity);
-      if (result.isFailure) {
-        final data = result.getFailure;
-        expect(data, isA<ApplicationException>());
-      } else {
-        fail('should return a ApplicationException');
-      }
+
+      expect(result.isFailure, true);
+      expect(result.getFailure, isA<ApplicationException>());
+      expect(result.getFailure.message, exception.message);
     });
   });
 }

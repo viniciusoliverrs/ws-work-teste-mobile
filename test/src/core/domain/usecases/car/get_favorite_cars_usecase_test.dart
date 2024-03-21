@@ -10,8 +10,12 @@ import 'package:ws_work_teste_mobile/src/core/utils/result.dart';
 class CarRepositoryMock extends Mock implements ICarRepository {}
 
 void main() {
-  final respository = CarRepositoryMock();
-  final getFavoriteCarsUsecase = GetFavoriteCarsUsecaseImpl(respository);
+  late ICarRepository respository;
+  late IGetFavoriteCarsUsecase getFavoriteCarsUsecase;
+  setUp(() {
+    respository = CarRepositoryMock();
+    getFavoriteCarsUsecase = GetFavoriteCarsUsecaseImpl(respository);
+  });
   group('GetFavoriteCarsUsecase', () {
     test('should return a list of favorite cars', () async {
       final favoriteCars = List.generate(
@@ -22,24 +26,25 @@ void main() {
                 isSync: Faker().randomGenerator.boolean(),
               ));
       when(() => respository.getFavoriteCars()).thenAnswer((_) async => (null, favoriteCars));
+
       final result = await getFavoriteCarsUsecase();
-      if (result.isSuccess) {
-        final data = result.getSuccess;
-        expect(data, isA<List<FavoriteCarEntity>>());
-      } else {
-        fail('should return a list of favorite cars');
-      }
+      verify(() => respository.getFavoriteCars()).called(1);
+
+      expect(result.isSuccess, true);
+      expect(result.getSuccess, isA<List<FavoriteCarEntity>>());
+      expect(result.getSuccess, favoriteCars);
     });
 
     test('should return a ApplicationException', () async {
-      when(() => respository.getFavoriteCars()).thenAnswer((_) async => (ApplicationException('Error'), null));
+      final exception = ApplicationException(Faker().lorem.word());
+      when(() => respository.getFavoriteCars()).thenAnswer((_) async => (exception, null));
+
       final result = await getFavoriteCarsUsecase();
-      if (result.isFailure) {
-        final data = result.getFailure;
-        expect(data, isA<ApplicationException>());
-      } else {
-        fail('should return a ApplicationException');
-      }
+      verify(() => respository.getFavoriteCars()).called(1);
+
+      expect(result.isFailure, true);
+      expect(result.getFailure, isA<ApplicationException>());
+      expect(result.getFailure.message, exception.message);
     });
   });
 }

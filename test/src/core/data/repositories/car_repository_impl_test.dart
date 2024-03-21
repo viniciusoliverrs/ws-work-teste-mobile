@@ -7,6 +7,7 @@ import 'package:ws_work_teste_mobile/src/core/data/mappers/favorite_car_mapper.d
 import 'package:ws_work_teste_mobile/src/core/data/mappers/set_car_favorite_mapper.dart';
 import 'package:ws_work_teste_mobile/src/core/data/repositories/car_repository_impl.dart';
 import 'package:ws_work_teste_mobile/src/core/domain/dtos/set_car_favorite.dart';
+import 'package:ws_work_teste_mobile/src/core/domain/entities/car.dart';
 import 'package:ws_work_teste_mobile/src/core/domain/entities/favorite_car.dart';
 import 'package:ws_work_teste_mobile/src/core/domain/exceptions/application_exception.dart';
 import 'package:ws_work_teste_mobile/src/core/domain/exceptions/mapper_exception.dart';
@@ -41,34 +42,34 @@ void main() {
                 "valor": Faker().randomGenerator.decimal(min: 10000),
               }));
       final result = await respository.getCars();
-      if (result.isSuccess) {
-        final cars = result.getSuccess;
-        expect(cars.length, 5);
-      } else {
-        fail('Should return a list of cars');
-      }
+      verify(() => remoteDatasource.getCars()).called(1);
+
+      expect(result.isSuccess, true);
+      expect(result.getSuccess, isA<List<CarEntity>>());
+      expect(result.getSuccess.length, 5);
     });
 
     test('should return a ApplicationException when the call to datasource is unsuccessful', () async {
-      when(() => remoteDatasource.getCars()).thenThrow(ApplicationException(Faker().lorem.sentence()));
+      final exception = ApplicationException(Faker().lorem.sentence());
+      when(() => remoteDatasource.getCars()).thenThrow(exception);
       final result = await respository.getCars();
-      if (result.isFailure) {
-        final exception = result.getFailure;
-        expect(exception, isA<ApplicationException>());
-      } else {
-        fail('Should return a ApplicationException');
-      }
+      verify(() => remoteDatasource.getCars()).called(1);
+
+      expect(result.isFailure, true);
+      expect(result.getFailure, isA<ApplicationException>());
+      expect(result.getFailure.message, exception.message);
     });
 
     test('should return a MapperException when the call to datasource is unsuccessful', () async {
-      when(() => remoteDatasource.getCars()).thenThrow(MapperException(Faker().lorem.sentence()));
+      final exception = MapperException(Faker().lorem.sentence());
+      when(() => remoteDatasource.getCars()).thenThrow(exception);
+
       final result = await respository.getCars();
-      if (result.isFailure) {
-        final exception = result.getFailure;
-        expect(exception, isA<ApplicationException>());
-      } else {
-        fail('Should return a ApplicationException');
-      }
+      verify(() => remoteDatasource.getCars()).called(1);
+
+      expect(result.isFailure, true);
+      expect(result.getFailure, isA<ApplicationException>());
+      expect(result.getFailure.message, exception.message);
     });
 
     test('should return a list of cars when the call to datasource is successful', () async {
@@ -78,13 +79,13 @@ void main() {
                 "id": Faker().randomGenerator.integer(9999),
                 "car_id": Faker().randomGenerator.integer(9999),
               }));
+
       final result = await respository.getFavoriteCars();
-      if (result.isSuccess) {
-        final cars = result.getSuccess;
-        expect(cars.length, 5);
-      } else {
-        fail('Should return a list of cars');
-      }
+      verify(() => localDatasource.getCarsFavorite()).called(1);
+
+      expect(result.isSuccess, true);
+      expect(result.getSuccess, isA<List<FavoriteCarEntity>>());
+      expect(result.getSuccess.length, 5);
     });
 
     test('should return a ApplicationException when the call to datasource is unsuccessful', () async {
@@ -117,50 +118,49 @@ void main() {
       final id = Faker().randomGenerator.integer(9999);
       when(() => localDatasource.setCarFavorite(map: mapper)).thenAnswer((_) async => id);
       final result = await respository.setCarFavorite(setFavoriteCar);
-      if (result.isSuccess) {
-        final response = result.getSuccess;
-        expect(response, id);
-      } else {
-        fail('Should return a int of car');
-      }
+      verify(() => localDatasource.setCarFavorite(map: mapper)).called(1);
+
+      expect(result.isSuccess, true);
+      expect(result.getSuccess, id);
+      expect(result.getSuccess, isA<int>());
     });
 
     test('should return a ApplicationException when the call to datasource is unsuccessful', () async {
       final setFavoriteCar = SetCarFavoriteDto(
         carId: Faker().randomGenerator.integer(9999),
       );
-      when(() => localDatasource.setCarFavorite(map: {})).thenThrow(ApplicationException(Faker().lorem.sentence()));
+      final mapper = SetCarFavoriteMapper.toMap(setFavoriteCar);
+      final exception = ApplicationException(Faker().lorem.sentence());
+      when(() => localDatasource.setCarFavorite(map: {})).thenThrow(exception);
       final result = await respository.setCarFavorite(setFavoriteCar);
-      if (result.isFailure) {
-        final exception = result.getFailure;
-        expect(exception, isA<ApplicationException>());
-      } else {
-        fail('Should return a ApplicationException');
-      }
+      verify(() => localDatasource.setCarFavorite(map: mapper)).called(1);
+
+      expect(result.isFailure, true);
+      expect(result.getFailure, isA<ApplicationException>());
+      expect(result.getFailure.message, exception.message);
     });
 
     test('should return a int of car when the call removeCarFavorite method to datasource is successful', () async {
       final dto = SetCarFavoriteDto(carId: Faker().randomGenerator.integer(9999));
       when(() => localDatasource.removeCarFavorite(carId: dto.carId)).thenAnswer((_) async => dto.carId);
       final result = await respository.removeCarFavorite(dto);
-      if (result.isSuccess) {
-        final response = result.getSuccess;
-        expect(response, dto.carId);
-      } else {
-        fail('Should return a int of car');
-      }
+      verify(() => localDatasource.removeCarFavorite(carId: dto.carId)).called(1);
+
+      expect(result.isSuccess, true);
+      expect(result.getSuccess, dto.carId);
+      expect(result.getSuccess, isA<int>());
     });
 
     test('should return a ApplicationException when the call removeCarFavorite method to datasource is unsuccessful', () async {
       final dto = SetCarFavoriteDto(carId: Faker().randomGenerator.integer(9999));
-      when(() => localDatasource.removeCarFavorite(carId: dto.carId)).thenThrow(ApplicationException(Faker().lorem.sentence()));
+      final exception = ApplicationException(Faker().lorem.sentence());
+      when(() => localDatasource.removeCarFavorite(carId: dto.carId)).thenThrow(exception);
       final result = await respository.removeCarFavorite(dto);
-      if (result.isFailure) {
-        final exception = result.getFailure;
-        expect(exception, isA<ApplicationException>());
-      } else {
-        fail('Should return a ApplicationException');
-      }
+      verify(() => localDatasource.removeCarFavorite(carId: dto.carId)).called(1);
+
+      expect(result.isFailure, true);
+      expect(result.getFailure, isA<ApplicationException>());
+      expect(result.getFailure.message, exception.message);
     });
 
     test('should return a int of car when the call updateCarAsFavorit method to datasource is successful', () async {
@@ -168,12 +168,11 @@ void main() {
       final mapper = FavoriteCarMapper.toMap(dto);
       when(() => localDatasource.updateCarAsFavorite(map: mapper)).thenAnswer((_) async => dto.id);
       final result = await respository.updateCarAsFavorite(dto);
-      if (result.isSuccess) {
-        final response = result.getSuccess;
-        expect(response, dto.id);
-      } else {
-        fail('Should return a int of car');
-      }
+      verify(() => respository.localDatasource.updateCarAsFavorite(map: mapper)).called(1);
+
+      expect(result.isSuccess, true);
+      expect(result.getSuccess, dto.id);
+      expect(result.getSuccess, isA<int>());
     });
 
     test('should return a ApplicationException when the call updateCarAsFavorit method to datasource is unsuccessful', () async {
@@ -207,21 +206,16 @@ void main() {
     });
 
     test('should return a ApplicationException when the call syncLeads method to datasource is unsuccessful', () async {
-      final favoriteCars = List.generate(
-          5,
-          (index) => FavoriteCarEntity(
-                id: Faker().randomGenerator.integer(9999),
-                carId: Faker().randomGenerator.integer(9999),
-              ));
+      final favoriteCars = List.generate(5, (index) => FavoriteCarEntity(id: Faker().randomGenerator.integer(9999), carId: Faker().randomGenerator.integer(9999)));
       final mapper = favoriteCars.map((car) => FavoriteCarMapper.toMap(car)).toList();
-      when(() => remoteDatasource.syncLeads(favoriteCars: mapper)).thenThrow(ApplicationException(Faker().lorem.sentence()));
+      final exception = ApplicationException(Faker().lorem.sentence());
+      when(() => remoteDatasource.syncLeads(favoriteCars: mapper)).thenThrow(exception);
       final result = await respository.syncLeads(favoriteCars: favoriteCars);
-      if (result.isFailure) {
-        final exception = result.getFailure;
-        expect(exception, isA<ApplicationException>());
-      } else {
-        fail('Should return a ApplicationException');
-      }
+      verify(() => remoteDatasource.syncLeads(favoriteCars: mapper)).called(1);
+
+      expect(result.isFailure, true);
+      expect(result.getFailure, isA<ApplicationException>());
+      expect(result.getFailure.message, exception.message);
     });
 
     test('should return a ApplicationException when the call syncLeads method to datasource is unsuccessful', () async {
@@ -232,14 +226,14 @@ void main() {
                 carId: Faker().randomGenerator.integer(9999),
               ));
       final mapper = favoriteCars.map((car) => FavoriteCarMapper.toMap(car)).toList();
-      when(() => remoteDatasource.syncLeads(favoriteCars: mapper)).thenThrow(MapperException(Faker().lorem.sentence()));
+      final exception = MapperException(Faker().lorem.sentence());
+      when(() => remoteDatasource.syncLeads(favoriteCars: mapper)).thenThrow(exception);
       final result = await respository.syncLeads(favoriteCars: favoriteCars);
-      if (result.isFailure) {
-        final exception = result.getFailure;
-        expect(exception, isA<ApplicationException>());
-      } else {
-        fail('Should return a ApplicationException');
-      }
+      verify(() => remoteDatasource.syncLeads(favoriteCars: mapper)).called(1);
+
+      expect(result.isFailure, true);
+      expect(result.getFailure, isA<ApplicationException>());
+      expect(result.getFailure.message, exception.message);
     });
   });
 
@@ -251,12 +245,11 @@ void main() {
     final mapper = FavoriteCarMapper.toMap(favoriteCar);
     when(() => localDatasource.updateCarAsFavorite(map: mapper)).thenAnswer((_) async => favoriteCar.id);
     final result = await respository.updateCarAsFavorite(favoriteCar);
-    if (result.isSuccess) {
-      final response = result.getSuccess;
-      expect(response, favoriteCar.id);
-    } else {
-      fail('Should return a bool');
-    }
+    verify(() => localDatasource.updateCarAsFavorite(map: mapper)).called(1);
+
+    expect(result.isSuccess, true);
+    expect(result.getSuccess, isA<int>());
+    expect(result.getSuccess, favoriteCar.id);
   });
 
   test('should return a ApplicationException when the call updateCarAsFavorite method to datasource is unsuccessful', () async {
@@ -264,14 +257,15 @@ void main() {
       id: Faker().randomGenerator.integer(9999),
       carId: Faker().randomGenerator.integer(9999),
     );
-    when(() => localDatasource.updateCarAsFavorite(map: {})).thenThrow(ApplicationException(Faker().lorem.sentence()));
+    final mapper = FavoriteCarMapper.toMap(favoriteCar);
+    final exception = ApplicationException(Faker().lorem.sentence());
+    when(() => localDatasource.updateCarAsFavorite(map: {})).thenThrow(exception);
     final result = await respository.updateCarAsFavorite(favoriteCar);
-    if (result.isFailure) {
-      final exception = result.getFailure;
-      expect(exception, isA<ApplicationException>());
-    } else {
-      fail('Should return a ApplicationException');
-    }
+    verify(() => localDatasource.updateCarAsFavorite(map: mapper)).called(1);
+
+    expect(result.isFailure, true);
+    expect(result.getFailure, isA<ApplicationException>());
+    expect(result.getFailure.message, exception.message);
   });
 
   test('should return a MapperException when the call updateCarAsFavorite method to datasource is unsuccessful', () async {
@@ -279,13 +273,12 @@ void main() {
       id: Faker().randomGenerator.integer(9999),
       carId: Faker().randomGenerator.integer(9999),
     );
+    final mapper = FavoriteCarMapper.toMap(favoriteCar);
     when(() => localDatasource.updateCarAsFavorite(map: {})).thenThrow(MapperException(Faker().lorem.sentence()));
     final result = await respository.updateCarAsFavorite(favoriteCar);
-    if (result.isFailure) {
-      final exception = result.getFailure;
-      expect(exception, isA<ApplicationException>());
-    } else {
-      fail('Should return a ApplicationException');
-    }
+    verify(() => localDatasource.updateCarAsFavorite(map: mapper)).called(1);
+
+    expect(result.isFailure, true);
+    expect(result.getFailure, isA<ApplicationException>());
   });
 }

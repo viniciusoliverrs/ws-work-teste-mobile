@@ -7,38 +7,35 @@ import 'package:ws_work_teste_mobile/src/core/domain/repositories/car_repository
 import 'package:ws_work_teste_mobile/src/core/domain/usecases/car/remove_car_as_favorite_usecase.dart';
 import 'package:ws_work_teste_mobile/src/core/utils/result.dart';
 
-class CarRepositoryMock extends Mock implements ICarRepository {}
+import '../../../../../mocks/utils.dart';
 
 void main() {
-  final repositorry = CarRepositoryMock();
-  final removeCarAsFavoriteUsecase = RemoveCarAsFavoriteUsecaseImpl(carRepository: repositorry);
+  late ICarRepository repositorry;
+  late IRemoveCarAsFavoriteUsecase removeCarAsFavoriteUsecase;
+  setUpAll(() {
+    repositorry = CarRepositoryMock();
+    removeCarAsFavoriteUsecase = RemoveCarAsFavoriteUsecaseImpl(carRepository: repositorry);
+  });
   group('RemoveCarAsFavoriteUsecaseImpl', () {
     test('should remove car as favorite', () async {
-      final dto = SetCarFavoriteDto(
-        carId: Faker().randomGenerator.integer(9999),
-      );
+      final dto = SetCarFavoriteDto(carId: Faker().randomGenerator.integer(9999));
       when(() => repositorry.removeCarFavorite(dto)).thenAnswer((_) async => (null, dto.carId));
       final result = await removeCarAsFavoriteUsecase(setCarFavoriteDto: dto);
-      if (result.isSuccess) {
-        final data = result.getSuccess;
-        expect(data, isA<int>());
-      } else {
-        fail('should remove car as favorite');
-      }
+      verify(() => repositorry.removeCarFavorite(dto)).called(1);
+      expect(result.isSuccess, true);
+      expect(result.getSuccess, isA<int>());
+      expect(result.getSuccess, dto.carId);
     });
 
     test('should return ApplicationException', () async {
-      final dto = SetCarFavoriteDto(
-        carId: Faker().randomGenerator.integer(9999),
-      );
-      when(() => repositorry.removeCarFavorite(dto)).thenAnswer((_) async => (ApplicationException('Error'), null));
+      final dto = SetCarFavoriteDto(carId: Faker().randomGenerator.integer(9999));
+      final exception = ApplicationException(Faker().lorem.word());
+      when(() => repositorry.removeCarFavorite(dto)).thenAnswer((_) async => (exception, null));
       final result = await removeCarAsFavoriteUsecase(setCarFavoriteDto: dto);
-      if (result.isFailure) {
-        final data = result.getFailure;
-        expect(data, isA<ApplicationException>());
-      } else {
-        fail('should return ApplicationException');
-      }
+      verify(() => repositorry.removeCarFavorite(dto)).called(1);
+      expect(result.isFailure, true);
+      expect(result.getFailure, isA<ApplicationException>());
+      expect(result.getFailure.message, exception.message);
     });
   });
 }
