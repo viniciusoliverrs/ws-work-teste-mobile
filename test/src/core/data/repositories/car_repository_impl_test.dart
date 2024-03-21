@@ -13,9 +13,7 @@ import 'package:ws_work_teste_mobile/src/core/domain/exceptions/application_exce
 import 'package:ws_work_teste_mobile/src/core/domain/exceptions/mapper_exception.dart';
 import 'package:ws_work_teste_mobile/src/core/utils/result.dart';
 
-class CarDatasourceMock extends Mock implements ICarRemoteDatasource {}
-
-class CarLocalDatasourceMock extends Mock implements ICarLocalDatasource {}
+import '../../../../mocks/utils.dart';
 
 void main() {
   late ICarLocalDatasource localDatasource;
@@ -23,7 +21,7 @@ void main() {
   late CarRepositoryImpl respository;
   setUp(() {
     localDatasource = CarLocalDatasourceMock();
-    remoteDatasource = CarDatasourceMock();
+    remoteDatasource = CarRemoteDatasourceMock();
     respository = CarRepositoryImpl(remoteDatasource: remoteDatasource, localDatasource: localDatasource);
   });
   group('CarRepositoryImpl', () {
