@@ -74,7 +74,7 @@ void main() {
       await tester.tap(carItemTile);
       await tester.pump();
 
-      expect(cars.first.isFavorite, true);
+      expect(cars.first.isFavorite, isTrue);
     });
 
     testWidgets('should display a message when the list is empty', (WidgetTester tester) async {
