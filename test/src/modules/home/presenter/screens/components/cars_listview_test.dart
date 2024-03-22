@@ -92,7 +92,7 @@ void main() {
       final listView = find.byKey(const Key('cars_listview'));
       expect(listView, findsNothing);
 
-      final emptyListMessage = find.text('No cars found');
+      final emptyListMessage = find.byKey(const Key('empty_list_icon'));
       expect(emptyListMessage, findsOneWidget);
     });
   });

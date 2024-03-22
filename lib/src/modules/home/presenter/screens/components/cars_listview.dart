@@ -16,7 +16,12 @@ class CarsListView extends StatelessWidget {
     return Visibility(
       visible: cars.isNotEmpty,
       replacement: const Center(
-        child: Text('No cars found'),
+        child: Icon(
+          key: Key('empty_list_icon'),
+          Icons.car_rental_outlined,
+          size: 100,
+          color: Colors.grey,
+        ),
       ),
       child: ListView.separated(
         key: const Key('cars_listview'),
