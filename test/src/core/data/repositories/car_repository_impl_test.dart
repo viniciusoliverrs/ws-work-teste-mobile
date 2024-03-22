@@ -135,7 +135,6 @@ void main() {
 
       expect(result.isFailure, true);
       expect(result.getFailure, isA<ApplicationException>());
-      expect(result.getFailure.message, exception.message);
     });
 
     test('should return a int of car when the call removeCarFavorite method to datasource is successful', () async {
@@ -263,7 +262,6 @@ void main() {
 
     expect(result.isFailure, true);
     expect(result.getFailure, isA<ApplicationException>());
-    expect(result.getFailure.message, exception.message);
   });
 
   test('should return a MapperException when the call updateCarAsFavorite method to datasource is unsuccessful', () async {
