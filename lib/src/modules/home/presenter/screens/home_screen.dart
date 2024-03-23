@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 
+import '../../../../core/data/services/toast_service.dart';
 import '../controllers/home_controller.dart';
 import '../states/home_state.dart';
 import '../viewmodels/contact_viewmodel.dart';
@@ -38,6 +39,10 @@ class _HomeScreenState extends State<HomeScreen> {
       body: ValueListenableBuilder(
           valueListenable: widget.controller,
           builder: (_, state, __) {
+            if (state is HomeErrorState) {
+              WidgetsBinding.instance.addPostFrameCallback((_) => ToastService.show(context, message: state.message));
+            }
+
             return AnimatedOpacity(
               duration: const Duration(milliseconds: 500),
               opacity: state is HomeLoadingState ? 0 : 1,
