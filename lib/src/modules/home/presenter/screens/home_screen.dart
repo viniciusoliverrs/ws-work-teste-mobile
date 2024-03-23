@@ -41,7 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   if (state is HomeLoadedState)
                     Expanded(
-                      child: CarsListView(
+                      child: CarsListViewWidget(
                         cars: state.cars,
                         onTap: (car) => widget.controller.favoriteCar(car.id),
                       ),

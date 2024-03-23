@@ -2,6 +2,7 @@ import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:ws_work_teste_mobile/src/core/domain/entities/car.dart';
+import 'package:ws_work_teste_mobile/src/modules/home/presenter/screens/components/car_item_tile.dart';
 import 'package:ws_work_teste_mobile/src/modules/home/presenter/screens/components/cars_listview.dart';
 
 void main() {
@@ -25,7 +26,7 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: CarsListView(
+            body: CarsListViewWidget(
               cars: cars,
               onTap: (car) {},
             ),
@@ -35,7 +36,7 @@ void main() {
       final listView = find.byKey(const Key('cars_listview'));
 
       expect(listView, findsOneWidget);
-      expect(find.byType(CarItemTile), findsNWidgets(cars.length));
+      expect(find.byType(CarItemTileWidget), findsNWidgets(cars.length));
     });
 
     testWidgets('should call onTap when a car is tapped', (WidgetTester tester) async {
@@ -56,7 +57,7 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: CarsListView(
+            body: CarsListViewWidget(
               cars: cars,
               onTap: (car) {
                 final carIndex = cars.indexWhere((c) => c.id == car.id);
@@ -81,7 +82,7 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: CarsListView(
+            body: CarsListViewWidget(
               cars: const [],
               onTap: (car) {},
             ),
