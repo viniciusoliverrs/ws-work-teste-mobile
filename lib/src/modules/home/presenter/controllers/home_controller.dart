@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:ws_work_teste_mobile/src/core/domain/usecases/car/sync_leads_usecase.dart';
 import 'package:ws_work_teste_mobile/src/core/utils/result.dart';
+import 'package:ws_work_teste_mobile/src/modules/home/presenter/viewmodels/contact_viewmodel.dart';
 
 import '../../../../core/domain/dtos/set_car_favorite.dart';
 import '../../../../core/domain/entities/car.dart';
@@ -71,15 +72,22 @@ class HomeController extends BaseController<HomeState> {
     }
   }
 
-  Future<void> favoriteCar(int carId) async {
+  Future<void> favoriteCar({
+    required int carId,
+    required ContactViewModel contactViewModel,
+  }) async {
     final oldState = currentState;
     if (oldState is HomeLoadedState) {
       final cars = oldState.cars;
       final index = cars.indexWhere((element) => element.id == carId);
       if (index != -1) {
         CarEntity car = cars[index];
+        final dto = SetCarFavoriteDto(
+          carId: car.id,
+          fullName: contactViewModel.fullName,
+          telephone: contactViewModel.telephone,
+        );
         if (!car.isFavorite) {
-          final dto = SetCarFavoriteDto(carId: car.id);
           final saveCarAsFavoriteResponse = await saveCarAsFavoriteUsecase(setCarFavoriteDto: dto);
           if (saveCarAsFavoriteResponse.isFailure) {
             emit(HomeErrorState(saveCarAsFavoriteResponse.getFailure.message));
@@ -87,7 +95,6 @@ class HomeController extends BaseController<HomeState> {
           }
           car = car.copyWith(isFavorite: !car.isFavorite);
         } else {
-          final dto = SetCarFavoriteDto(carId: car.id);
           final removeCarAsFavoriteResponse = await removeCarAsFavoriteUsecase(setCarFavoriteDto: dto);
           if (removeCarAsFavoriteResponse.isFailure) {
             emit(HomeErrorState(removeCarAsFavoriteResponse.getFailure.message));

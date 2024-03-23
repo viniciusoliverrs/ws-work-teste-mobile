@@ -24,12 +24,16 @@ void main() {
         id: Faker().randomGenerator.integer(9999),
         carId: Faker().randomGenerator.integer(9999),
         isSync: Faker().randomGenerator.boolean(),
+        fullName: Faker().person.name(),
+        telephone: Faker().phoneNumber.us(),
       );
 
       final result = FavoriteCarMapper.toMap(favoriteCar);
       expect(result['id'], favoriteCar.id);
       expect(result['car_id'], favoriteCar.carId);
       expect(result['is_sync'], favoriteCar.isSync ? 1 : 0);
+      expect(result['full_name'], favoriteCar.fullName);
+      expect(result['telephone'], favoriteCar.telephone);
     });
 
     test('fromMap throws MapperException', () {

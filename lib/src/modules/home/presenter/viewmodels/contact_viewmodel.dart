@@ -1,9 +1,7 @@
-class SetCarFavoriteDto {
-  final int carId;
+class ContactViewModel {
   final String fullName;
   final String telephone;
-  SetCarFavoriteDto({
-    required this.carId,
+  ContactViewModel({
     required this.fullName,
     required this.telephone,
   });

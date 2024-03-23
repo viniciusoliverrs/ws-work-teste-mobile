@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 
 import '../controllers/home_controller.dart';
 import '../states/home_state.dart';
+import '../viewmodels/contact_viewmodel.dart';
 import 'components/cars_listview.dart';
+import 'components/form_contact.dart';
 
 class HomeScreen extends StatefulWidget {
   final HomeController controller;
@@ -17,6 +19,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final fullNameController = TextEditingController();
+  final telephoneController = TextEditingController();
   @override
   void initState() {
     super.initState();
@@ -43,7 +47,20 @@ class _HomeScreenState extends State<HomeScreen> {
                     Expanded(
                       child: CarsListViewWidget(
                         cars: state.cars,
-                        onTap: (car) => widget.controller.favoriteCar(car.id),
+                        onTap: (car) async {
+                          final viewModel = await showDialog(
+                            context: context,
+                            builder: (_) {
+                              return FormContactWidget(
+                                fullNameController: fullNameController,
+                                telephoneController: telephoneController,
+                              );
+                            },
+                          );
+                          if (viewModel is ContactViewModel) {
+                            await widget.controller.favoriteCar(carId: car.id, contactViewModel: viewModel);
+                          }
+                        },
                       ),
                     ),
                 ],

@@ -111,6 +111,8 @@ void main() {
     test('should return a int of car when the call to datasource is successful', () async {
       final setFavoriteCar = SetCarFavoriteDto(
         carId: Faker().randomGenerator.integer(9999),
+        fullName: Faker().person.name(),
+        telephone: Faker().phoneNumber.us(),
       );
       final mapper = SetCarFavoriteMapper.toMap(setFavoriteCar);
       final id = Faker().randomGenerator.integer(9999);
@@ -126,6 +128,8 @@ void main() {
     test('should return a ApplicationException when the call to datasource is unsuccessful', () async {
       final setFavoriteCar = SetCarFavoriteDto(
         carId: Faker().randomGenerator.integer(9999),
+        fullName: Faker().person.name(),
+        telephone: Faker().phoneNumber.us(),
       );
       final mapper = SetCarFavoriteMapper.toMap(setFavoriteCar);
       final exception = ApplicationException(Faker().lorem.sentence());
@@ -138,7 +142,11 @@ void main() {
     });
 
     test('should return a int of car when the call removeCarFavorite method to datasource is successful', () async {
-      final dto = SetCarFavoriteDto(carId: Faker().randomGenerator.integer(9999));
+      final dto = SetCarFavoriteDto(
+        carId: Faker().randomGenerator.integer(9999),
+        fullName: Faker().person.name(),
+        telephone: Faker().phoneNumber.us(),
+      );
       when(() => localDatasource.removeCarFavorite(carId: dto.carId)).thenAnswer((_) async => dto.carId);
       final result = await respository.removeCarFavorite(dto);
       verify(() => localDatasource.removeCarFavorite(carId: dto.carId)).called(1);
@@ -149,7 +157,11 @@ void main() {
     });
 
     test('should return a ApplicationException when the call removeCarFavorite method to datasource is unsuccessful', () async {
-      final dto = SetCarFavoriteDto(carId: Faker().randomGenerator.integer(9999));
+      final dto = SetCarFavoriteDto(
+        carId: Faker().randomGenerator.integer(9999),
+        fullName: Faker().person.name(),
+        telephone: Faker().phoneNumber.us(),
+      );
       final exception = ApplicationException(Faker().lorem.sentence());
       when(() => localDatasource.removeCarFavorite(carId: dto.carId)).thenThrow(exception);
       final result = await respository.removeCarFavorite(dto);
@@ -161,7 +173,12 @@ void main() {
     });
 
     test('should return a int of car when the call updateCarAsFavorit method to datasource is successful', () async {
-      final dto = FavoriteCarEntity(id: Faker().randomGenerator.integer(9999), carId: Faker().randomGenerator.integer(9999));
+      final dto = FavoriteCarEntity(
+        id: Faker().randomGenerator.integer(9999),
+        carId: Faker().randomGenerator.integer(9999),
+        fullName: Faker().person.name(),
+        telephone: Faker().phoneNumber.us(),
+      );
       final mapper = FavoriteCarMapper.toMap(dto);
       when(() => localDatasource.updateCarAsFavorite(map: mapper)).thenAnswer((_) async => dto.id);
       final result = await respository.updateCarAsFavorite(dto);
@@ -173,7 +190,12 @@ void main() {
     });
 
     test('should return a ApplicationException when the call updateCarAsFavorit method to datasource is unsuccessful', () async {
-      final dto = FavoriteCarEntity(id: Faker().randomGenerator.integer(9999), carId: Faker().randomGenerator.integer(9999));
+      final dto = FavoriteCarEntity(
+        id: Faker().randomGenerator.integer(9999),
+        carId: Faker().randomGenerator.integer(9999),
+        fullName: Faker().person.name(),
+        telephone: Faker().phoneNumber.us(),
+      );
       when(() => localDatasource.updateCarAsFavorite(map: {})).thenThrow(ApplicationException(Faker().lorem.sentence()));
       final result = await respository.updateCarAsFavorite(dto);
       if (result.isFailure) {
@@ -190,6 +212,8 @@ void main() {
           (index) => FavoriteCarEntity(
                 id: Faker().randomGenerator.integer(9999),
                 carId: Faker().randomGenerator.integer(9999),
+                fullName: Faker().person.name(),
+                telephone: Faker().phoneNumber.us(),
               ));
       final mapper = favoriteCars.map((car) => FavoriteCarMapper.toMap(car)).toList();
       when(() => remoteDatasource.syncLeads(favoriteCars: mapper)).thenAnswer((_) async => true);
@@ -203,7 +227,14 @@ void main() {
     });
 
     test('should return a ApplicationException when the call syncLeads method to datasource is unsuccessful', () async {
-      final favoriteCars = List.generate(5, (index) => FavoriteCarEntity(id: Faker().randomGenerator.integer(9999), carId: Faker().randomGenerator.integer(9999)));
+      final favoriteCars = List.generate(
+          5,
+          (index) => FavoriteCarEntity(
+                id: Faker().randomGenerator.integer(9999),
+                carId: Faker().randomGenerator.integer(9999),
+                fullName: Faker().person.name(),
+                telephone: Faker().phoneNumber.us(),
+              ));
       final mapper = favoriteCars.map((car) => FavoriteCarMapper.toMap(car)).toList();
       final exception = ApplicationException(Faker().lorem.sentence());
       when(() => remoteDatasource.syncLeads(favoriteCars: mapper)).thenThrow(exception);
@@ -219,6 +250,8 @@ void main() {
       final favoriteCars = List.generate(
           5,
           (index) => FavoriteCarEntity(
+                fullName: Faker().person.name(),
+                telephone: Faker().phoneNumber.us(),
                 id: Faker().randomGenerator.integer(9999),
                 carId: Faker().randomGenerator.integer(9999),
               ));
@@ -238,6 +271,8 @@ void main() {
     final favoriteCar = FavoriteCarEntity(
       id: Faker().randomGenerator.integer(9999),
       carId: Faker().randomGenerator.integer(9999),
+      fullName: Faker().person.name(),
+      telephone: Faker().phoneNumber.us(),
     );
     final mapper = FavoriteCarMapper.toMap(favoriteCar);
     when(() => localDatasource.updateCarAsFavorite(map: mapper)).thenAnswer((_) async => favoriteCar.id);
@@ -253,6 +288,8 @@ void main() {
     final favoriteCar = FavoriteCarEntity(
       id: Faker().randomGenerator.integer(9999),
       carId: Faker().randomGenerator.integer(9999),
+      fullName: Faker().person.name(),
+      telephone: Faker().phoneNumber.us(),
     );
     final mapper = FavoriteCarMapper.toMap(favoriteCar);
     final exception = ApplicationException(Faker().lorem.sentence());
@@ -268,6 +305,8 @@ void main() {
     final favoriteCar = FavoriteCarEntity(
       id: Faker().randomGenerator.integer(9999),
       carId: Faker().randomGenerator.integer(9999),
+      fullName: Faker().person.name(),
+      telephone: Faker().phoneNumber.us(),
     );
     final mapper = FavoriteCarMapper.toMap(favoriteCar);
     when(() => localDatasource.updateCarAsFavorite(map: {})).thenThrow(MapperException(Faker().lorem.sentence()));

@@ -18,7 +18,11 @@ void main() {
   });
   group('SaveCarAsFavoriteUsecaseImpl', () {
     test('should save car as favorite', () async {
-      final entity = SetCarFavoriteDto(carId: Faker().randomGenerator.integer(9999));
+      final entity = SetCarFavoriteDto(
+        carId: Faker().randomGenerator.integer(9999),
+        fullName: Faker().person.name(),
+        telephone: Faker().phoneNumber.us(),
+      );
       final id = Faker().randomGenerator.integer(9999);
       when(() => repository.setCarFavorite(entity)).thenAnswer((_) async => (null, id));
 
@@ -29,7 +33,11 @@ void main() {
       expect(result.getSuccess, isA<int>());
     });
     test('should return a ApplicationException', () async {
-      final entity = SetCarFavoriteDto(carId: Faker().randomGenerator.integer(9999));
+      final entity = SetCarFavoriteDto(
+        carId: Faker().randomGenerator.integer(9999),
+        fullName: Faker().person.name(),
+        telephone: Faker().phoneNumber.us(),
+      );
       final exception = ApplicationException(Faker().lorem.word());
       when(() => repository.setCarFavorite(entity)).thenAnswer((_) async => (exception, null));
 

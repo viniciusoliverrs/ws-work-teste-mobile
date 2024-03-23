@@ -1,6 +1,6 @@
 import 'package:flutter_modular/flutter_modular.dart';
 
-import '../../core/core_module.dart';
+import '../../core/di/core_module.dart';
 import 'presenter/controllers/home_controller.dart';
 import 'presenter/screens/home_screen.dart';
 

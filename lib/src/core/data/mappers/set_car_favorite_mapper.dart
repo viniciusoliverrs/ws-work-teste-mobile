@@ -6,6 +6,8 @@ class SetCarFavoriteMapper {
     try {
       return SetCarFavoriteDto(
         carId: map['car_id'] ?? 0,
+        fullName: map['full_name'] ?? '',
+        telephone: map['telephone'] ?? '',
       );
     } catch (exception, stacktrace) {
       throw MapperException('Was not possible to map the set car favorite.', stackTrace: stacktrace);
@@ -16,6 +18,8 @@ class SetCarFavoriteMapper {
     try {
       return {
         'car_id': setCarFavorite.carId,
+        'full_name': setCarFavorite.fullName,
+        'telephone': setCarFavorite.telephone,
       };
     } catch (exception, stacktrace) {
       throw MapperException('Was not possible to map the set car favorite.', stackTrace: stacktrace);

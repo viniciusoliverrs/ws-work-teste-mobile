@@ -20,7 +20,15 @@ void main() {
   });
   group('SyncLeadsUseCase', () {
     test('should return error', () async {
-      final favoriteCars = List.generate(2, (index) => FavoriteCarEntity(id: index, isSync: false, carId: Faker().randomGenerator.integer(10)));
+      final favoriteCars = List.generate(
+          2,
+          (index) => FavoriteCarEntity(
+                id: index,
+                isSync: false,
+                carId: Faker().randomGenerator.integer(10),
+                fullName: Faker().person.name(),
+                telephone: Faker().phoneNumber.us(),
+              ));
       final exception = ApplicationException(Faker().lorem.word());
       when(() => carRepository.syncLeads(favoriteCars: favoriteCars)).thenAnswer((_) async => (exception, null));
       for (var i = 0; i < favoriteCars.length; i++) {
@@ -35,7 +43,16 @@ void main() {
     });
 
     test('should return error on update', () async {
-      final favoriteCars = List.generate(2, (index) => FavoriteCarEntity(id: index, isSync: false, carId: Faker().randomGenerator.integer(10)));
+      final favoriteCars = List.generate(
+        2,
+        (index) => FavoriteCarEntity(
+          id: index,
+          isSync: false,
+          carId: Faker().randomGenerator.integer(10),
+          fullName: Faker().person.name(),
+          telephone: Faker().phoneNumber.us(),
+        ),
+      );
       final exception = ApplicationException(Faker().lorem.word());
       when(() => carRepository.syncLeads(favoriteCars: favoriteCars)).thenAnswer((_) async => (null, true));
       for (var i = 0; i < favoriteCars.length; i++) {

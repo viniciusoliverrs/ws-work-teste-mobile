@@ -18,7 +18,11 @@ void main() {
   });
   group('RemoveCarAsFavoriteUsecaseImpl', () {
     test('should remove car as favorite', () async {
-      final dto = SetCarFavoriteDto(carId: Faker().randomGenerator.integer(9999));
+      final dto = SetCarFavoriteDto(
+        carId: Faker().randomGenerator.integer(9999),
+        fullName: Faker().person.name(),
+        telephone: Faker().phoneNumber.us(),
+      );
       when(() => repositorry.removeCarFavorite(dto)).thenAnswer((_) async => (null, dto.carId));
       final result = await removeCarAsFavoriteUsecase(setCarFavoriteDto: dto);
       verify(() => repositorry.removeCarFavorite(dto)).called(1);
@@ -28,7 +32,11 @@ void main() {
     });
 
     test('should return ApplicationException', () async {
-      final dto = SetCarFavoriteDto(carId: Faker().randomGenerator.integer(9999));
+      final dto = SetCarFavoriteDto(
+        carId: Faker().randomGenerator.integer(9999),
+        fullName: Faker().person.name(),
+        telephone: Faker().phoneNumber.us(),
+      );
       final exception = ApplicationException(Faker().lorem.word());
       when(() => repositorry.removeCarFavorite(dto)).thenAnswer((_) async => (exception, null));
       final result = await removeCarAsFavoriteUsecase(setCarFavoriteDto: dto);

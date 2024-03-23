@@ -24,6 +24,8 @@ void main() {
                 id: Faker().randomGenerator.integer(9999),
                 carId: Faker().randomGenerator.integer(9999),
                 isSync: Faker().randomGenerator.boolean(),
+                fullName: Faker().person.name(),
+                telephone: Faker().phoneNumber.us(),
               ));
       when(() => respository.getFavoriteCars()).thenAnswer((_) async => (null, favoriteCars));
 
