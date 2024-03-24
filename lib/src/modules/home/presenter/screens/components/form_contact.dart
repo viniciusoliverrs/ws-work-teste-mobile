@@ -18,6 +18,7 @@ class FormContactWidget extends StatefulWidget {
 }
 
 class _FormContactWidgetState extends State<FormContactWidget> {
+  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
@@ -38,6 +39,12 @@ class _FormContactWidgetState extends State<FormContactWidget> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
+                  Expanded(
+                    child: Text(
+                      'Contact us',
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                  ),
                   IconButton(
                     onPressed: () => Modular.to.pop(),
                     icon: const Icon(Icons.close),
@@ -45,27 +52,58 @@ class _FormContactWidgetState extends State<FormContactWidget> {
                 ],
               ),
               SizedBox(height: size.height * 0.03),
-              TextField(
-                controller: widget.fullNameController,
-                decoration: const InputDecoration(
-                  labelText: 'Full Name',
-                ),
-              ),
-              TextField(
-                controller: widget.telephoneController,
-                decoration: const InputDecoration(
-                  labelText: 'Telephone',
+              Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    TextFormField(
+                      autofocus: true,
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      controller: widget.fullNameController,
+                      decoration: const InputDecoration(
+                        labelText: 'Full Name',
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter some text';
+                        }
+                        if (!RegExp(r'^\w+\s\w+').hasMatch(value)) {
+                          return 'Please enter a last name and first name';
+                        }
+                        return null;
+                      },
+                    ),
+                    TextFormField(
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      controller: widget.telephoneController,
+                      decoration: const InputDecoration(
+                        labelText: 'Telephone',
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter some text';
+                        }
+                        if (!RegExp(r'^\d{10,11}$').hasMatch(value)) {
+                          return 'Please enter a valid telephone';
+                        }
+                        return null;
+                      },
+                    ),
+                  ],
                 ),
               ),
               const SizedBox(height: 20),
               ElevatedButton(
                 key: Key('${widget.key.toString()}_submit'),
-                onPressed: () => Modular.to.pop(
-                  ContactViewModel(
-                    fullName: widget.fullNameController.text,
-                    telephone: widget.telephoneController.text,
-                  ),
-                ),
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    final viewModel = ContactViewModel(
+                      fullName: widget.fullNameController.text,
+                      telephone: widget.telephoneController.text,
+                    );
+                    Modular.to.pop(viewModel);
+                  }
+                },
                 child: const Text('Submit'),
               ),
             ],

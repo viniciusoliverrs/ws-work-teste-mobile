@@ -53,17 +53,21 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: CarsListViewWidget(
                         cars: state.cars,
                         onTap: (car) async {
-                          final viewModel = await showDialog(
-                            context: context,
-                            builder: (_) {
-                              return FormContactWidget(
-                                fullNameController: fullNameController,
-                                telephoneController: telephoneController,
-                              );
-                            },
-                          );
-                          if (viewModel is ContactViewModel) {
-                            await widget.controller.favoriteCar(carId: car.id, contactViewModel: viewModel);
+                          if (car.isFavorite) {
+                            await widget.controller.removeFavoriteCar(car.id);
+                          } else {
+                            final viewModel = await showDialog(
+                              context: context,
+                              builder: (_) {
+                                return FormContactWidget(
+                                  fullNameController: fullNameController,
+                                  telephoneController: telephoneController,
+                                );
+                              },
+                            );
+                            if (viewModel is ContactViewModel) {
+                              await widget.controller.addFavoriteCar(carId: car.id, contactViewModel: viewModel);
+                            }
                           }
                         },
                       ),

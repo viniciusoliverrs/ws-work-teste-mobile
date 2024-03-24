@@ -72,7 +72,7 @@ class HomeController extends BaseController<HomeState> {
     }
   }
 
-  Future<void> favoriteCar({
+  Future<void> addFavoriteCar({
     required int carId,
     required ContactViewModel contactViewModel,
   }) async {
@@ -87,21 +87,36 @@ class HomeController extends BaseController<HomeState> {
           fullName: contactViewModel.fullName,
           telephone: contactViewModel.telephone,
         );
-        if (!car.isFavorite) {
-          final saveCarAsFavoriteResponse = await saveCarAsFavoriteUsecase(setCarFavoriteDto: dto);
-          if (saveCarAsFavoriteResponse.isFailure) {
-            emit(HomeErrorState(saveCarAsFavoriteResponse.getFailure.message));
-            return;
-          }
-          car = car.copyWith(isFavorite: !car.isFavorite);
-        } else {
-          final removeCarAsFavoriteResponse = await removeCarAsFavoriteUsecase(setCarFavoriteDto: dto);
-          if (removeCarAsFavoriteResponse.isFailure) {
-            emit(HomeErrorState(removeCarAsFavoriteResponse.getFailure.message));
-            return;
-          }
-          car = car.copyWith(isFavorite: !car.isFavorite);
+        final saveCarAsFavoriteResponse = await saveCarAsFavoriteUsecase(setCarFavoriteDto: dto);
+        if (saveCarAsFavoriteResponse.isFailure) {
+          emit(HomeErrorState(saveCarAsFavoriteResponse.getFailure.message));
+          return;
         }
+        cars[index] = car.copyWith(isFavorite: !car.isFavorite);
+        emit(oldState.copyWith(cars: cars));
+        _getFavoriteCars();
+      }
+    }
+  }
+
+  Future<void> removeFavoriteCar(int carId) async {
+    final oldState = currentState;
+    if (oldState is HomeLoadedState) {
+      final cars = oldState.cars;
+      final index = cars.indexWhere((element) => element.id == carId);
+      if (index != -1) {
+        CarEntity car = cars[index];
+        final dto = SetCarFavoriteDto(
+          carId: car.id,
+          fullName: '',
+          telephone: '',
+        );
+        final removeCarAsFavoriteResponse = await removeCarAsFavoriteUsecase(setCarFavoriteDto: dto);
+        if (removeCarAsFavoriteResponse.isFailure) {
+          emit(HomeErrorState(removeCarAsFavoriteResponse.getFailure.message));
+          return;
+        }
+        car = car.copyWith(isFavorite: !car.isFavorite);
         cars[index] = car;
         emit(oldState.copyWith(cars: cars));
         _getFavoriteCars();

@@ -12,7 +12,8 @@ class _AppWidgetState extends State<AppWidget> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      title: 'Modular Flutter',
+      debugShowCheckedModeBanner: false,
+      title: 'Flutter demo',
       routerDelegate: Modular.routerDelegate,
       routeInformationParser: Modular.routeInformationParser,
     );
