@@ -1,7 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:ws_work_teste_mobile/src/core/utils/extensions/theme_extension.dart';
 
+import '../../../../../app/theme/extensions/common_theme_extension.dart';
 import '../../viewmodels/contact_viewmodel.dart';
 
 class FormContactWidget extends StatefulWidget {
@@ -22,15 +25,13 @@ class _FormContactWidgetState extends State<FormContactWidget> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
+    final theme = context.getExtension<CommonThemeExtension>();
     return Material(
       color: Colors.transparent,
       child: Center(
         child: Container(
           width: size.width * 0.8,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
-          ),
+          decoration: theme?.card1,
           padding: const EdgeInsets.all(10),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -41,8 +42,8 @@ class _FormContactWidgetState extends State<FormContactWidget> {
                 children: [
                   Expanded(
                     child: Text(
-                      'Contact us',
-                      style: Theme.of(context).textTheme.titleLarge,
+                      "form.contact_us".tr(),
+                      style: theme?.paragraph1,
                     ),
                   ),
                   IconButton(
@@ -58,10 +59,13 @@ class _FormContactWidgetState extends State<FormContactWidget> {
                   children: [
                     TextFormField(
                       autofocus: true,
+                      key: const Key('full_name'),
+                      keyboardType: TextInputType.text,
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       controller: widget.fullNameController,
-                      decoration: const InputDecoration(
-                        labelText: 'Full Name',
+                      decoration: InputDecoration(
+                        labelText: 'form.full_name'.tr(),
+                        hintStyle: theme?.paragraph1,
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -74,10 +78,13 @@ class _FormContactWidgetState extends State<FormContactWidget> {
                       },
                     ),
                     TextFormField(
+                      key: const Key('telephone'),
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       controller: widget.telephoneController,
-                      decoration: const InputDecoration(
-                        labelText: 'Telephone',
+                      keyboardType: TextInputType.phone,
+                      decoration: InputDecoration(
+                        labelText: 'form.telephone'.tr(),
+                        hintStyle: theme?.paragraph1,
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -104,7 +111,10 @@ class _FormContactWidgetState extends State<FormContactWidget> {
                     Modular.to.pop(viewModel);
                   }
                 },
-                child: const Text('Submit'),
+                child: Text(
+                  "form.submit".tr(),
+                  style: theme?.paragraph1,
+                ),
               ),
             ],
           ),

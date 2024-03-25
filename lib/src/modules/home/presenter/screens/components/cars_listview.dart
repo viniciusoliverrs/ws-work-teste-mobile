@@ -27,6 +27,7 @@ class CarsListViewWidget extends StatelessWidget {
       child: ListView.separated(
         key: const Key('cars_listview'),
         itemCount: cars.length,
+        physics: const BouncingScrollPhysics(),
         padding: const EdgeInsets.symmetric(horizontal: 10),
         separatorBuilder: (context, index) => const SizedBox(height: 10),
         itemBuilder: (context, index) => CarItemTileWidget(

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:ws_work_teste_mobile/src/core/utils/extensions/theme_extension.dart';
 
+import '../../../../../app/theme/extensions/common_theme_extension.dart';
 import '../../../../../core/domain/entities/car.dart';
 
 class CarItemTileWidget extends StatelessWidget {
@@ -14,12 +16,10 @@ class CarItemTileWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = context.getExtension<CommonThemeExtension>();
     return Container(
-      padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        color: Colors.grey.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(10),
-      ),
+      padding: const EdgeInsets.all(8.0),
+      decoration: theme?.card2,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
