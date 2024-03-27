@@ -2,7 +2,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:ws_work_teste_mobile/src/core/utils/extensions/theme_extension.dart';
+import 'package:ws_work_teste_mobile/src/core/utils/extensions/build_context_extension.dart';
 
 import '../../../../../app/theme/extensions/common_theme_extension.dart';
 import '../../viewmodels/contact_viewmodel.dart';

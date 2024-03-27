@@ -1,6 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
-import 'package:flutter_modular/flutter_modular.dart';
+import 'package:ws_work_teste_mobile/src/core/utils/extensions/build_context_extension.dart';
 
 import '../controllers/splash_controller.dart';
 import '../states/splash_state.dart';
@@ -33,7 +33,7 @@ class _SplashScreenState extends State<SplashScreen> {
       builder: (context, state, child) {
         if (state is SplashLoadedState) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
-            Modular.to.navigate(state.route);
+            context.navigate(state.route);
           });
         }
         return const Center(
