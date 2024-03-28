@@ -36,6 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final theme = context.getExtension<CommonThemeExtension>();
     return Scaffold(
+      key: const Key('home_screen'),
       backgroundColor: theme?.backgroundColor,
       appBar: AppBar(
         title: Text(
@@ -58,6 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   if (state is HomeLoadedState)
                     Expanded(
                       child: CarsListViewWidget(
+                        key: const Key('car_listview'),
                         cars: state.cars,
                         onTap: (car) async {
                           if (car.isFavorite) {

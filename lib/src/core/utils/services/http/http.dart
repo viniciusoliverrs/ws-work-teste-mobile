@@ -1,6 +1,6 @@
 import 'http_response.dart';
 
-abstract class IHttp {
+abstract interface class IHttp {
   Future<HttpResponse<T>> get<T>({
     required String endpoint,
     String? baseUrl,

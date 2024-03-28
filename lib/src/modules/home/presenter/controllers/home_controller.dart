@@ -28,7 +28,6 @@ class HomeController extends BaseController<HomeState> {
     required this.removeCarAsFavoriteUsecase,
     required this.syncLeadsUsecase,
   }) : super(HomeInitialState());
-
   Future<void> initialize() async {
     await _getCars();
     _syncLeadsTimer?.cancel();

@@ -18,6 +18,7 @@ class CarItemTileWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = context.getExtension<CommonThemeExtension>();
     return Container(
+      key: Key('${car.id}'),
       padding: const EdgeInsets.all(8.0),
       decoration: theme?.card2,
       child: Column(
@@ -26,12 +27,16 @@ class CarItemTileWidget extends StatelessWidget {
           Row(
             children: [
               Expanded(
-                child: Text(car.modelName),
+                child: Text(
+                  car.modelName,
+                  key: Key('${key.toString()}model_name'),
+                ),
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   RichText(
+                    key: Key('${key.toString()}doors'),
                     text: TextSpan(
                       text: 'Portas: ',
                       style: DefaultTextStyle.of(context).style,
@@ -44,6 +49,7 @@ class CarItemTileWidget extends StatelessWidget {
                     ),
                   ),
                   RichText(
+                    key: Key('${key.toString()}year'),
                     text: TextSpan(
                       text: 'Ano: ',
                       style: DefaultTextStyle.of(context).style,
