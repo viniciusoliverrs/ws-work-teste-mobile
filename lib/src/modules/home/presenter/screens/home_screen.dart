@@ -59,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   if (state is HomeLoadedState)
                     Expanded(
                       child: CarsListViewWidget(
-                        key: const Key('car_listview'),
+                        key: const Key('car_list_view_widget'),
                         cars: state.cars,
                         onTap: (car) async {
                           if (car.isFavorite) {

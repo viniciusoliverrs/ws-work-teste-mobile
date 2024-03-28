@@ -18,7 +18,7 @@ class CarItemTileWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = context.getExtension<CommonThemeExtension>();
     return Container(
-      key: Key('${car.id}'),
+      key: key,
       padding: const EdgeInsets.all(8.0),
       decoration: theme?.card2,
       child: Column(
